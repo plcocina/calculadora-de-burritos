@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calculadora de Burritos</title>
+    <style>
+      :root {
+        --bg: #fbfaf8;
+        --surface: #ffffff;
+        --surface-soft: #f4f1ec;
+        --text: #201a15;
+        --muted: #776c62;
+        --border: #ded7cf;
+        --accent: #534ab7;
+        --accent-soft: #eeedfe;
+        --accent-mid: #afa9ec;
+        --green: #0f6e56;
+        --green-soft: #e1f5ee;
+        --amber: #633806;
+        --amber-soft: #faeeda;
+        --amber-mid: #fac775;
+        --ok: #3b6d11;
+        --ok-soft: #eaf3de;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top left, rgba(250, 238, 218, 0.9), transparent 34rem),
+          linear-gradient(180deg, #fffaf3 0%, var(--bg) 44%, #f7f5f1 100%);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page {
+        width: min(100%, 980px);
+        margin: 0 auto;
+        padding: 24px 18px 36px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr;
+        align-items: end;
+        margin-bottom: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-mark,
+      .item-icon {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        border-radius: 10px;
+        font-weight: 700;
+      }
+
+      .brand-mark {
+        width: 44px;
+        height: 44px;
+        background: var(--amber-soft);
+        color: var(--amber);
+        font-size: 19px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.55rem, 4vw, 2.4rem);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .input-card {
+        background: var(--surface);
+        border: 2px solid var(--accent);
+        border-radius: 14px;
+        box-shadow: 0 0 0 4px var(--accent-soft), 0 18px 45px rgba(54, 45, 31, 0.08);
+        padding: 18px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--accent);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .input-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .input-shell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        background: var(--accent-soft);
+        border-radius: 10px;
+        padding: 10px 14px;
+      }
+
+      .input-prefix {
+        color: #7f77dd;
+        font-weight: 800;
+      }
+
+      input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #26215c;
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+
+      input::placeholder {
+        color: rgba(38, 33, 92, 0.45);
+      }
+
+      .clear {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+        padding: 0 14px;
+        font-weight: 700;
+      }
+
+      .clear[hidden] {
+        display: none;
+      }
+
+      .hint {
+        margin: 8px 0 0;
+        color: #7f77dd;
+        font-size: 0.78rem;
+      }
+
+      .main {
+        display: grid;
+        gap: 18px;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .kpi,
+      .notice,
+      .panel,
+      .ingredient {
+        border-radius: 12px;
+      }
+
+      .kpi {
+        background: var(--surface-soft);
+        padding: 16px;
+      }
+
+      .kpi.strong {
+        background: var(--accent-soft);
+        border: 2px solid var(--accent-mid);
+      }
+
+      .eyebrow {
+        margin: 0 0 4px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .kpi.strong .eyebrow {
+        color: var(--accent);
+      }
+
+      .kpi-value {
+        margin: 0;
+        font-size: 1.9rem;
+        font-weight: 800;
+      }
+
+      .kpi.strong .kpi-value {
+        color: #3c3489;
+      }
+
+      .notice {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 14px;
+        border: 1px solid #9fe1cb;
+        background: var(--green-soft);
+        color: #085041;
+        font-size: 0.9rem;
+      }
+
+      .notice.ok {
+        border-color: #c0dd97;
+        background: var(--ok-soft);
+        color: #27500a;
+      }
+
+      .section-title {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .panel {
+        background: var(--amber-soft);
+        border: 1px solid var(--amber-mid);
+        padding: 16px;
+      }
+
+      .panel-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .panel-icon {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: var(--amber-mid);
+        color: var(--amber);
+        font-weight: 900;
+      }
+
+      .panel-title {
+        margin: 0;
+        color: #412402;
+        font-size: 0.98rem;
+        font-weight: 800;
+      }
+
+      .panel-subtitle {
+        margin: 2px 0 0;
+        color: #854f0b;
+        font-size: 0.78rem;
+      }
+
+      .pollo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .pollo-cell {
+        min-width: 0;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.58);
+        padding: 9px 12px;
+      }
+
+      .pollo-label,
+      .pollo-full {
+        margin: 0;
+        color: #854f0b;
+        font-size: 0.76rem;
+      }
+
+      .pollo-label {
+        font-weight: 800;
+      }
+
+      .pollo-main {
+        margin: 2px 0;
+        color: #412402;
+        font-size: 1.25rem;
+        font-weight: 800;
+      }
+
+      .unit {
+        color: #854f0b;
+        font-size: 0.76rem;
+        font-weight: 500;
+      }
+
+      .yield {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.42);
+        color: var(--amber);
+        margin: 0;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+
+      .ingredients {
+        display: grid;
+        gap: 8px;
+      }
+
+      .ingredient {
+        display: grid;
+        grid-template-columns: 44px 1fr auto auto;
+        align-items: center;
+        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 12px 16px;
+      }
+
+      .item-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.35rem;
+      }
+
+      .ingredient h3,
+      .ingredient p {
+        margin: 0;
+      }
+
+      .ingredient h3 {
+        font-size: 0.94rem;
+      }
+
+      .ingredient-note,
+      .amount-label {
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+
+      .amount {
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .amount-value {
+        font-size: 1rem;
+        font-weight: 800;
+      }
+
+      .empty {
+        display: grid;
+        place-items: center;
+        min-height: 260px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .empty-card {
+        width: min(100%, 420px);
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.55);
+        padding: 30px 20px;
+      }
+
+      .empty-icon {
+        margin: 0 0 10px;
+        color: #9a9086;
+        font-size: 2.1rem;
+        font-weight: 800;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      @media (min-width: 800px) {
+        .hero {
+          grid-template-columns: minmax(0, 0.95fr) minmax(380px, 1.05fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          padding-inline: 14px;
+        }
+
+        .input-row,
+        .kpis,
+        .pollo-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .clear {
+          min-height: 42px;
+        }
+
+        .ingredient {
+          grid-template-columns: 44px 1fr;
+        }
+
+        .amount {
+          grid-column: span 1;
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">B</div>
+          <div>
+            <h1>Producción de burritos</h1>
+            <p class="subtitle">Porción de olla = 50 burritos · 1 pollo = 4 burritos</p>
+          </div>
+        </div>
+
+        <section class="input-card" aria-label="Calculadora">
+          <label for="burrito-input">¿Cuántos burritos necesitas producir?</label>
+          <div class="input-row">
+            <div class="input-shell">
+              <span class="input-prefix" aria-hidden="true">#</span>
+              <input id="burrito-input" type="number" min="1" inputmode="numeric" placeholder="Escribe aquí el número..." autocomplete="off">
+            </div>
+            <button class="clear" id="clear-button" type="button" hidden>Limpiar</button>
+          </div>
+          <p class="hint">El cálculo se actualiza automáticamente.</p>
+        </section>
+      </section>
+
+      <section id="results" class="main" aria-live="polite" hidden>
+        <div class="kpis">
+          <article class="kpi">
+            <p class="eyebrow">Burritos</p>
+            <p class="kpi-value" id="kpi-burritos">0</p>
+          </article>
+          <article class="kpi strong">
+            <p class="eyebrow">Porciones de olla</p>
+            <p class="kpi-value" id="kpi-porciones">0</p>
+          </article>
+        </div>
+
+        <div class="notice" id="notice"></div>
+
+        <section>
+          <p class="section-title">Pollo necesario en crudo</p>
+          <article class="panel">
+            <div class="panel-head">
+              <div class="panel-icon" aria-hidden="true">P</div>
+              <div>
+                <p class="panel-title">Pollo pierna y muslo</p>
+                <p class="panel-subtitle">1 pollo = 4 piernas + 4 muslos = 4 burritos · rinde 112-120 gr/pieza</p>
+              </div>
+            </div>
+            <div class="pollo-grid" id="pollo-grid"></div>
+            <p class="yield" id="yield"></p>
+          </article>
+        </section>
+
+        <section>
+          <p class="section-title">Ingredientes de receta</p>
+          <div class="ingredients" id="ingredients"></div>
+        </section>
+      </section>
+
+      <section id="empty" class="empty">
+        <div class="empty-card">
+          <p class="empty-icon" aria-hidden="true">+</p>
+          <p>Ingresa el número de burritos para ver el desglose de producción.</p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const PORTION = 50;
+      const BURRITOS_POR_POLLO = 4;
+      const PIEZAS_POR_POLLO = 8;
+      const GR_MIN = 112;
+      const GR_MAX = 120;
+
+      const RECIPE = [
+        { key: "pollo", label: "Pollo desmenuzado", gr: 120, unit: "gr", mark: "🍗", colorText: "#633806", colorBg: "#faeeda" },
+        { key: "arroz", label: "Arroz", gr: 70, unit: "gr", mark: "🍚", colorText: "#085041", colorBg: "#e1f5ee" },
+        { key: "frijoles", label: "Frijoles", gr: 70, unit: "gr", mark: "🫘", colorText: "#4a1b0c", colorBg: "#faece7" },
+        { key: "caldo", label: "Caldo de frijoles", gr: 20, unit: "gr", mark: "🥣", colorText: "#042c53", colorBg: "#e6f1fb" },
+        { key: "tortilla", label: "Tortilla de harina", gr: 1, unit: "pza", mark: "🌯", colorText: "#26215c", colorBg: "#eeedfe" },
+      ];
+
+      const input = document.querySelector("#burrito-input");
+      const clearButton = document.querySelector("#clear-button");
+      const results = document.querySelector("#results");
+      const empty = document.querySelector("#empty");
+      const notice = document.querySelector("#notice");
+      const polloGrid = document.querySelector("#pollo-grid");
+      const ingredients = document.querySelector("#ingredients");
+      const yieldBox = document.querySelector("#yield");
+
+      const formatter = new Intl.NumberFormat("es-MX");
+
+      function fmtAmt(n, unit) {
+        if (unit === "pza") return { val: formatter.format(n), label: "pzas" };
+        if (n >= 1000) return { val: (n / 1000).toFixed(2), label: "kg" };
+        return { val: formatter.format(n), label: "gr" };
+      }
+
+      function calculate(burritos) {
+        const porciones = Math.ceil(burritos / PORTION);
+        const sobrante = porciones * PORTION - burritos;
+        const pollosExacto = Math.ceil(burritos / BURRITOS_POR_POLLO);
+        const pollosOlla = Math.ceil((porciones * PORTION) / BURRITOS_POR_POLLO);
+
+        return {
+          porciones,
+          sobrante,
+          pollosExacto,
+          pollosOlla,
+          piernasExacto: pollosExacto * 4,
+          muslosExacto: pollosExacto * 4,
+          piernasOlla: pollosOlla * 4,
+          muslosOlla: pollosOlla * 4,
+          grMinExacto: pollosExacto * PIEZAS_POR_POLLO * GR_MIN,
+          grMaxExacto: pollosExacto * PIEZAS_POR_POLLO * GR_MAX,
+          items: RECIPE.map((r) => ({
+            ...r,
+            exact: r.unit === "pza" ? burritos : burritos * r.gr,
+            full: r.unit === "pza" ? porciones * PORTION : porciones * PORTION * r.gr,
+          })),
+        };
+      }
+
+      function renderPolloRows(result) {
+        const rows = [
+          { lbl: "Pollos enteros", exact: result.pollosExacto, full: result.pollosOlla, unit: "pollos" },
+          { lbl: "Piernas", exact: result.piernasExacto, full: result.piernasOlla, unit: "pzas" },
+          { lbl: "Muslos", exact: result.muslosExacto, full: result.muslosOlla, unit: "pzas" },
+          {
+            lbl: "Total piezas",
+            exact: result.pollosExacto * PIEZAS_POR_POLLO,
+            full: result.pollosOlla * PIEZAS_POR_POLLO,
+            unit: "pzas",
+          },
+        ];
+
+        polloGrid.innerHTML = rows.map((row) => `
+          <article class="pollo-cell">
+            <p class="pollo-label">${row.lbl}</p>
+            <p class="pollo-main">${formatter.format(row.exact)} <span class="unit">${row.unit}</span></p>
+            <p class="pollo-full">x ${result.porciones} ollas: ${formatter.format(row.full)} ${row.unit}</p>
+          </article>
+        `).join("");
+      }
+
+      function renderIngredients(result) {
+        ingredients.innerHTML = result.items.map((item) => {
+          const exact = fmtAmt(item.exact, item.unit);
+          const full = fmtAmt(item.full, item.unit);
+          const note = item.unit === "pza" ? `${item.gr} pza por burrito` : `${item.gr} gr por burrito`;
+
+          return `
+            <article class="ingredient">
+              <div class="item-icon" style="background:${item.colorBg}; color:${item.colorText}" aria-hidden="true">${item.mark}</div>
+              <div>
+                <h3>${item.label}</h3>
+                <p class="ingredient-note">${note}</p>
+              </div>
+              <div class="amount">
+                <p class="amount-label">Exacto</p>
+                <p class="amount-value">${exact.val} <span class="unit">${exact.label}</span></p>
+              </div>
+              <div class="amount">
+                <p class="amount-label">x ${result.porciones} ollas</p>
+                <p class="amount-value">${full.val} <span class="unit">${full.label}</span></p>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      function render() {
+        const burritos = Number.parseInt(input.value, 10) || 0;
+        clearButton.hidden = !input.value;
+
+        if (burritos <= 0) {
+          results.hidden = true;
+          empty.hidden = false;
+          return;
+        }
+
+        const result = calculate(burritos);
+        results.hidden = false;
+        empty.hidden = true;
+
+        document.querySelector("#kpi-burritos").textContent = formatter.format(burritos);
+        document.querySelector("#kpi-porciones").textContent = formatter.format(result.porciones);
+
+        notice.className = result.sobrante > 0 ? "notice" : "notice ok";
+        notice.innerHTML = result.sobrante > 0
+          ? `Se producirán <strong>${formatter.format(result.sobrante)} burrito${result.sobrante > 1 ? "s" : ""} extra</strong> para completar la última olla.`
+          : "Número exacto, sin sobrante.";
+
+        renderPolloRows(result);
+        yieldBox.innerHTML = `Rendimiento estimado: <strong>${formatter.format(result.grMinExacto)}-${formatter.format(result.grMaxExacto)} gr</strong> de pollo desmenuzado.`;
+        renderIngredients(result);
+      }
+
+      input.addEventListener("input", render);
+      clearButton.addEventListener("click", () => {
+        input.value = "";
+        input.focus();
+        render();
+      });
+    </script>
+  </body>
+</html>
