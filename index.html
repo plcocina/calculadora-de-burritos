@@ -15,12 +15,10 @@
         --accent: #534ab7;
         --accent-soft: #eeedfe;
         --accent-mid: #afa9ec;
-        --green: #0f6e56;
         --green-soft: #e1f5ee;
         --amber: #633806;
         --amber-soft: #faeeda;
         --amber-mid: #fac775;
-        --ok: #3b6d11;
         --ok-soft: #eaf3de;
       }
 
@@ -64,20 +62,19 @@
       }
 
       .brand-mark,
-      .item-icon {
+      .item-icon,
+      .panel-icon {
         display: grid;
         place-items: center;
         flex: 0 0 auto;
         border-radius: 10px;
-        font-weight: 700;
       }
 
       .brand-mark {
         width: 44px;
         height: 44px;
         background: var(--amber-soft);
-        color: var(--amber);
-        font-size: 19px;
+        font-size: 1.6rem;
       }
 
       h1 {
@@ -126,8 +123,7 @@
       }
 
       .input-prefix {
-        color: #7f77dd;
-        font-weight: 800;
+        font-size: 1.25rem;
       }
 
       input {
@@ -153,10 +149,6 @@
         cursor: pointer;
         padding: 0 14px;
         font-weight: 700;
-      }
-
-      .clear[hidden] {
-        display: none;
       }
 
       .hint {
@@ -193,10 +185,11 @@
         border: 2px solid var(--accent-mid);
       }
 
-      .eyebrow {
+      .eyebrow,
+      .section-title {
         margin: 0 0 4px;
         color: var(--muted);
-        font-size: 0.72rem;
+        font-size: 0.76rem;
         font-weight: 800;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -234,12 +227,7 @@
       }
 
       .section-title {
-        margin: 0 0 10px;
-        color: var(--muted);
-        font-size: 0.76rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
+        margin-bottom: 10px;
       }
 
       .panel {
@@ -256,14 +244,10 @@
       }
 
       .panel-icon {
-        display: grid;
-        place-items: center;
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
+        width: 44px;
+        height: 44px;
         background: var(--amber-mid);
-        color: var(--amber);
-        font-weight: 900;
+        font-size: 1.6rem;
       }
 
       .panel-title {
@@ -336,7 +320,7 @@
 
       .ingredient {
         display: grid;
-        grid-template-columns: 44px 1fr auto auto;
+        grid-template-columns: 52px 1fr auto auto;
         align-items: center;
         gap: 12px;
         background: var(--surface);
@@ -345,9 +329,9 @@
       }
 
       .item-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 1.35rem;
+        width: 52px;
+        height: 52px;
+        font-size: 1.75rem;
       }
 
       .ingredient h3,
@@ -393,9 +377,7 @@
 
       .empty-icon {
         margin: 0 0 10px;
-        color: #9a9086;
         font-size: 2.1rem;
-        font-weight: 800;
       }
 
       [hidden] {
@@ -424,11 +406,10 @@
         }
 
         .ingredient {
-          grid-template-columns: 44px 1fr;
+          grid-template-columns: 52px 1fr;
         }
 
         .amount {
-          grid-column: span 1;
           text-align: left;
         }
       }
@@ -438,7 +419,7 @@
     <main class="page">
       <section class="hero">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">B</div>
+          <div class="brand-mark" aria-hidden="true">🌯</div>
           <div>
             <h1>Producción de burritos</h1>
             <p class="subtitle">Porción de olla = 50 burritos · 1 pollo = 4 burritos</p>
@@ -446,15 +427,15 @@
         </div>
 
         <section class="input-card" aria-label="Calculadora">
-          <label for="burrito-input">¿Cuántos burritos necesitas producir?</label>
+          <label for="burrito-input">✏️ ¿Cuántos burritos necesitas producir?</label>
           <div class="input-row">
             <div class="input-shell">
-              <span class="input-prefix" aria-hidden="true">#</span>
-              <input id="burrito-input" type="number" min="1" inputmode="numeric" placeholder="Escribe aquí el número..." autocomplete="off">
+              <span class="input-prefix" aria-hidden="true">🌯</span>
+              <input id="burrito-input" type="number" min="1" inputmode="numeric" placeholder="Escribe aquí el número de burritos..." autocomplete="off">
             </div>
-            <button class="clear" id="clear-button" type="button" hidden>Limpiar</button>
+            <button class="clear" id="clear-button" type="button" hidden>✕ Limpiar</button>
           </div>
-          <p class="hint">El cálculo se actualiza automáticamente.</p>
+          <p class="hint">⬆️ El cálculo se actualiza automáticamente.</p>
         </section>
       </section>
 
@@ -465,7 +446,7 @@
             <p class="kpi-value" id="kpi-burritos">0</p>
           </article>
           <article class="kpi strong">
-            <p class="eyebrow">Porciones de olla</p>
+            <p class="eyebrow">🍲 Porciones de olla</p>
             <p class="kpi-value" id="kpi-porciones">0</p>
           </article>
         </div>
@@ -476,7 +457,7 @@
           <p class="section-title">Pollo necesario en crudo</p>
           <article class="panel">
             <div class="panel-head">
-              <div class="panel-icon" aria-hidden="true">P</div>
+              <div class="panel-icon" aria-hidden="true">🐔</div>
               <div>
                 <p class="panel-title">Pollo pierna y muslo</p>
                 <p class="panel-subtitle">1 pollo = 4 piernas + 4 muslos = 4 burritos · rinde 112-120 gr/pieza</p>
@@ -495,7 +476,7 @@
 
       <section id="empty" class="empty">
         <div class="empty-card">
-          <p class="empty-icon" aria-hidden="true">+</p>
+          <p class="empty-icon" aria-hidden="true">👨‍🍳</p>
           <p>Ingresa el número de burritos para ver el desglose de producción.</p>
         </div>
       </section>
@@ -509,11 +490,11 @@
       const GR_MAX = 120;
 
       const RECIPE = [
-        { key: "pollo", label: "Pollo desmenuzado", gr: 120, unit: "gr", mark: "🍗", colorText: "#633806", colorBg: "#faeeda" },
-        { key: "arroz", label: "Arroz", gr: 70, unit: "gr", mark: "🍚", colorText: "#085041", colorBg: "#e1f5ee" },
-        { key: "frijoles", label: "Frijoles", gr: 70, unit: "gr", mark: "🫘", colorText: "#4a1b0c", colorBg: "#faece7" },
-        { key: "caldo", label: "Caldo de frijoles", gr: 20, unit: "gr", mark: "🥣", colorText: "#042c53", colorBg: "#e6f1fb" },
-        { key: "tortilla", label: "Tortilla de harina", gr: 1, unit: "pza", mark: "🌯", colorText: "#26215c", colorBg: "#eeedfe" },
+        { key: "pollo", label: "Pollo desmenuzado", gr: 120, unit: "gr", emoji: "🍗", colorText: "#633806", colorBg: "#faeeda" },
+        { key: "arroz", label: "Arroz", gr: 70, unit: "gr", emoji: "🍚", colorText: "#085041", colorBg: "#e1f5ee" },
+        { key: "frijoles", label: "Frijoles", gr: 70, unit: "gr", emoji: "🫘", colorText: "#4a1b0c", colorBg: "#faece7" },
+        { key: "caldo", label: "Caldo de frijoles", gr: 20, unit: "gr", emoji: "🥣", colorText: "#042c53", colorBg: "#e6f1fb" },
+        { key: "tortilla", label: "Tortilla de harina", gr: 1, unit: "pza", emoji: "🫓", colorText: "#26215c", colorBg: "#eeedfe" },
       ];
 
       const input = document.querySelector("#burrito-input");
@@ -524,7 +505,6 @@
       const polloGrid = document.querySelector("#pollo-grid");
       const ingredients = document.querySelector("#ingredients");
       const yieldBox = document.querySelector("#yield");
-
       const formatter = new Intl.NumberFormat("es-MX");
 
       function fmtAmt(n, unit) {
@@ -588,7 +568,7 @@
 
           return `
             <article class="ingredient">
-              <div class="item-icon" style="background:${item.colorBg}; color:${item.colorText}" aria-hidden="true">${item.mark}</div>
+              <div class="item-icon" style="background:${item.colorBg}; color:${item.colorText}" aria-hidden="true">${item.emoji}</div>
               <div>
                 <h3>${item.label}</h3>
                 <p class="ingredient-note">${note}</p>
@@ -625,11 +605,11 @@
 
         notice.className = result.sobrante > 0 ? "notice" : "notice ok";
         notice.innerHTML = result.sobrante > 0
-          ? `Se producirán <strong>${formatter.format(result.sobrante)} burrito${result.sobrante > 1 ? "s" : ""} extra</strong> para completar la última olla.`
-          : "Número exacto, sin sobrante.";
+          ? `ℹ️ Se producirán <strong>${formatter.format(result.sobrante)} burrito${result.sobrante > 1 ? "s" : ""} extra</strong> para completar la última olla.`
+          : "✅ Número exacto, sin sobrante.";
 
         renderPolloRows(result);
-        yieldBox.innerHTML = `Rendimiento estimado: <strong>${formatter.format(result.grMinExacto)}-${formatter.format(result.grMaxExacto)} gr</strong> de pollo desmenuzado.`;
+        yieldBox.innerHTML = `ℹ️ Rendimiento estimado: <strong>${formatter.format(result.grMinExacto)}-${formatter.format(result.grMaxExacto)} gr</strong> de pollo desmenuzado.`;
         renderIngredients(result);
       }
 
