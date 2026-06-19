@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
   <head>
@@ -352,6 +353,7 @@
       .amount {
         text-align: right;
         white-space: nowrap;
+        min-width: 78px;
       }
 
       .amount-value {
@@ -395,6 +397,47 @@
           padding-inline: 14px;
         }
 
+        h1 {
+          font-size: 2.15rem;
+        }
+
+        .subtitle {
+          font-size: 1rem;
+        }
+
+        label,
+        .notice,
+        .panel-title {
+          font-size: 1rem;
+        }
+
+        .hint,
+        .panel-subtitle,
+        .yield,
+        .pollo-label,
+        .pollo-full,
+        .ingredient-note,
+        .amount-label {
+          font-size: 0.88rem;
+        }
+
+        input {
+          font-size: 1.45rem;
+        }
+
+        .section-title,
+        .eyebrow {
+          font-size: 0.86rem;
+        }
+
+        .kpi-value {
+          font-size: 2.25rem;
+        }
+
+        .pollo-main {
+          font-size: 1.45rem;
+        }
+
         .input-row,
         .kpis,
         .pollo-grid {
@@ -406,11 +449,49 @@
         }
 
         .ingredient {
-          grid-template-columns: 52px 1fr;
+          grid-template-columns: 64px 1fr;
+          column-gap: 14px;
+          row-gap: 16px;
+          padding: 16px 18px;
+        }
+
+        .item-icon {
+          width: 64px;
+          height: 64px;
+          font-size: 2rem;
+        }
+
+        .ingredient h3 {
+          font-size: 1.18rem;
         }
 
         .amount {
+          min-width: 0;
           text-align: left;
+          white-space: nowrap;
+        }
+
+        .amount-value {
+          display: flex;
+          align-items: baseline;
+          gap: 4px;
+          font-size: 1.18rem;
+          line-height: 1.1;
+        }
+
+        .exact-amount {
+          grid-column: 1 / 2;
+        }
+
+        .full-amount {
+          grid-column: 2 / 3;
+          padding-left: 12px;
+          border-left: 1px solid var(--border);
+        }
+
+        .unit {
+          font-size: 0.82rem;
+          line-height: 1;
         }
       }
     </style>
@@ -573,11 +654,11 @@
                 <h3>${item.label}</h3>
                 <p class="ingredient-note">${note}</p>
               </div>
-              <div class="amount">
+              <div class="amount exact-amount">
                 <p class="amount-label">Exacto</p>
                 <p class="amount-value">${exact.val} <span class="unit">${exact.label}</span></p>
               </div>
-              <div class="amount">
+              <div class="amount full-amount">
                 <p class="amount-label">x ${result.porciones} ollas</p>
                 <p class="amount-value">${full.val} <span class="unit">${full.label}</span></p>
               </div>
