@@ -499,7 +499,7 @@
           <div class="brand-mark" aria-hidden="true">🌯</div>
           <div>
             <h1>Producción de burritos</h1>
-            <p class="subtitle">Porción de olla = 50 burritos · 1 montura = 2 burritos</p>
+            <p class="subtitle">Porción de olla = 50 burritos · 1 pollo = 4 burritos</p>
           </div>
         </div>
 
@@ -536,8 +536,8 @@
             <div class="panel-head">
               <div class="panel-icon" aria-hidden="true">🐔</div>
               <div>
-                <p class="panel-title">Pollo de montura</p>
-                <p class="panel-subtitle">1 montura = 2 piernas + 2 muslos = 2 burritos · rinde 112-120 gr/pieza</p>
+                <p class="panel-title">Pollo</p>
+                <p class="panel-subtitle">1 pollo = 4 burritos · rinde 112-120 gr/pieza</p>
               </div>
             </div>
             <div class="pollo-grid" id="pollo-grid"></div>
@@ -561,8 +561,8 @@
 
     <script>
       const PORTION = 50;
-      const BURRITOS_POR_MONTURA = 2;
-      const PIEZAS_POR_MONTURA = 4;
+      const BURRITOS_POR_POLLO = 4;
+      const PIEZAS_POR_POLLO = 8;
       const BURRITOS_POR_KG_ADEREZO = 25;
       const GR_MIN = 112;
       const GR_MAX = 120;
@@ -596,16 +596,16 @@
       function calculate(burritos) {
         const porciones = Math.ceil(burritos / PORTION);
         const sobrante = porciones * PORTION - burritos;
-        const monturasExacto = Math.ceil(burritos / BURRITOS_POR_MONTURA);
-        const monturasOlla = Math.ceil((porciones * PORTION) / BURRITOS_POR_MONTURA);
+        const pollosExacto = Math.ceil(burritos / BURRITOS_POR_POLLO);
+        const pollosOlla = Math.ceil((porciones * PORTION) / BURRITOS_POR_POLLO);
 
         return {
           porciones,
           sobrante,
-          monturasExacto,
-          monturasOlla,
-          grMinExacto: monturasExacto * PIEZAS_POR_MONTURA * GR_MIN,
-          grMaxExacto: monturasExacto * PIEZAS_POR_MONTURA * GR_MAX,
+          pollosExacto,
+          pollosOlla,
+          grMinExacto: pollosExacto * PIEZAS_POR_POLLO * GR_MIN,
+          grMaxExacto: pollosExacto * PIEZAS_POR_POLLO * GR_MAX,
           items: RECIPE.map((r) => ({
             ...r,
             exact: r.unit === "pza" ? burritos : r.unit === "kg-aderezo" ? Math.ceil(burritos / BURRITOS_POR_KG_ADEREZO) : burritos * r.gr,
@@ -616,14 +616,14 @@
 
       function renderPolloRows(result) {
         const rows = [
-          { lbl: "Monturas", exact: result.monturasExacto, full: result.monturasOlla, unit: "monturas" },
+          { lbl: "Pollos", exact: result.pollosExacto, full: result.pollosOlla, unit: "pollos" },
         ];
 
         polloGrid.innerHTML = rows.map((row) => `
           <article class="pollo-cell">
             <p class="pollo-label">${row.lbl}</p>
-            <p class="pollo-main">${formatter.format(row.exact)} <span class="unit">${row.exact === 1 ? "montura" : row.unit}</span></p>
-            <p class="pollo-full">x ${result.porciones} ollas: ${formatter.format(row.full)} ${row.full === 1 ? "montura" : row.unit}</p>
+            <p class="pollo-main">${formatter.format(row.exact)} <span class="unit">${row.exact === 1 ? "pollo" : row.unit}</span></p>
+            <p class="pollo-full">x ${result.porciones} ollas: ${formatter.format(row.full)} ${row.full === 1 ? "pollo" : row.unit}</p>
           </article>
         `).join("");
       }
