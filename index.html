@@ -563,6 +563,7 @@
       const PORTION = 50;
       const BURRITOS_POR_MONTURA = 2;
       const PIEZAS_POR_MONTURA = 4;
+      const BURRITOS_POR_KG_ADEREZO = 25;
       const GR_MIN = 112;
       const GR_MAX = 120;
 
@@ -572,6 +573,7 @@
         { key: "frijoles", label: "Frijoles", gr: 70, unit: "gr", emoji: "🫘", colorText: "#4a1b0c", colorBg: "#faece7" },
         { key: "caldo", label: "Caldo de frijoles", gr: 20, unit: "gr", emoji: "🥣", colorText: "#042c53", colorBg: "#e6f1fb" },
         { key: "tortilla", label: "Tortilla de harina", gr: 1, unit: "pza", emoji: "🫓", colorText: "#26215c", colorBg: "#eeedfe" },
+        { key: "aderezo", label: "Aderezo Chipotle", gr: 1, unit: "kg-aderezo", emoji: "🌶️", colorText: "#6f1d0e", colorBg: "#faece7" },
       ];
 
       const input = document.querySelector("#burrito-input");
@@ -586,6 +588,7 @@
 
       function fmtAmt(n, unit) {
         if (unit === "pza") return { val: formatter.format(n), label: "pzas" };
+        if (unit === "kg-aderezo") return { val: formatter.format(n), label: "kg" };
         if (n >= 1000) return { val: (n / 1000).toFixed(2), label: "kg" };
         return { val: formatter.format(n), label: "gr" };
       }
@@ -605,8 +608,8 @@
           grMaxExacto: monturasExacto * PIEZAS_POR_MONTURA * GR_MAX,
           items: RECIPE.map((r) => ({
             ...r,
-            exact: r.unit === "pza" ? burritos : burritos * r.gr,
-            full: r.unit === "pza" ? porciones * PORTION : porciones * PORTION * r.gr,
+            exact: r.unit === "pza" ? burritos : r.unit === "kg-aderezo" ? Math.ceil(burritos / BURRITOS_POR_KG_ADEREZO) : burritos * r.gr,
+            full: r.unit === "pza" ? porciones * PORTION : r.unit === "kg-aderezo" ? Math.ceil((porciones * PORTION) / BURRITOS_POR_KG_ADEREZO) : porciones * PORTION * r.gr,
           })),
         };
       }
@@ -629,7 +632,11 @@
         ingredients.innerHTML = result.items.map((item) => {
           const exact = fmtAmt(item.exact, item.unit);
           const full = fmtAmt(item.full, item.unit);
-          const note = item.unit === "pza" ? `${item.gr} pza por burrito` : `${item.gr} gr por burrito`;
+          const note = item.unit === "pza"
+            ? `${item.gr} pza por burrito`
+            : item.unit === "kg-aderezo"
+              ? `1 kg por cada ${BURRITOS_POR_KG_ADEREZO} burritos`
+              : `${item.gr} gr por burrito`;
 
           return `
             <article class="ingredient">
