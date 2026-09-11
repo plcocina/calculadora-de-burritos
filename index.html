@@ -363,6 +363,44 @@
         font-weight: 800;
       }
 
+      .ingredient-subdetail {
+        grid-column: 2 / -1;
+        display: grid;
+        gap: 8px;
+        border-radius: 10px;
+        background: #faece7;
+        border: 1px solid #f0cfc3;
+        padding: 10px 12px;
+      }
+
+      .subdetail-title {
+        color: #4a1b0c;
+        font-size: 0.8rem;
+        font-weight: 800;
+      }
+
+      .subdetail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .subdetail-label {
+        color: #7a4a39;
+        font-size: 0.74rem;
+      }
+
+      .subdetail-value {
+        color: #4a1b0c;
+        font-size: 1rem;
+        font-weight: 800;
+      }
+
+      .subdetail-note {
+        color: #7a4a39;
+        font-size: 0.74rem;
+      }
+
       .empty {
         display: grid;
         place-items: center;
@@ -413,7 +451,9 @@
         .pollo-label,
         .pollo-full,
         .ingredient-note,
-        .amount-label {
+        .amount-label,
+        .subdetail-label,
+        .subdetail-note {
           font-size: 0.88rem;
         }
 
@@ -467,7 +507,8 @@
           white-space: nowrap;
         }
 
-        .amount-value {
+        .amount-value,
+        .subdetail-value {
           display: flex;
           align-items: baseline;
           gap: 4px;
@@ -483,6 +524,14 @@
           grid-column: 2 / 3;
           padding-left: 12px;
           border-left: 1px solid var(--border);
+        }
+
+        .ingredient-subdetail {
+          grid-column: 1 / -1;
+        }
+
+        .subdetail-title {
+          font-size: 0.98rem;
         }
 
         .unit {
@@ -564,13 +613,15 @@
       const BURRITOS_POR_POLLO = 4;
       const PIEZAS_POR_POLLO = 8;
       const BURRITOS_POR_KG_ADEREZO = 25;
+      const FRIJOL_CRUDO_KG = 3;
+      const FRIJOL_COCIDO_KG = 5.55;
       const GR_MIN = 112;
       const GR_MAX = 120;
 
       const RECIPE = [
         { key: "pollo", label: "Pollo desmenuzado", gr: 120, unit: "gr", emoji: "🍗", colorText: "#633806", colorBg: "#faeeda" },
         { key: "arroz", label: "Arroz", gr: 70, unit: "gr", emoji: "🍚", colorText: "#085041", colorBg: "#e1f5ee" },
-        { key: "frijoles", label: "Frijoles", gr: 70, unit: "gr", emoji: "🫘", colorText: "#4a1b0c", colorBg: "#faece7" },
+        { key: "frijoles", label: "Frijoles Charros", gr: 70, unit: "gr", emoji: "🫘", colorText: "#4a1b0c", colorBg: "#faece7" },
         { key: "caldo", label: "Caldo de frijoles", gr: 20, unit: "gr", emoji: "🥣", colorText: "#042c53", colorBg: "#e6f1fb" },
         { key: "tortilla", label: "Tortilla de harina", gr: 1, unit: "pza", emoji: "🫓", colorText: "#26215c", colorBg: "#eeedfe" },
         { key: "aderezo", label: "Aderezo Chipotle", gr: 1, unit: "kg-aderezo", emoji: "🌶️", colorText: "#6f1d0e", colorBg: "#faece7" },
@@ -593,6 +644,10 @@
         return { val: formatter.format(n), label: "gr" };
       }
 
+      function fmtKg(n) {
+        return { val: n.toFixed(2), label: "kg" };
+      }
+
       function calculate(burritos) {
         const porciones = Math.ceil(burritos / PORTION);
         const sobrante = porciones * PORTION - burritos;
@@ -610,6 +665,8 @@
             ...r,
             exact: r.unit === "pza" ? burritos : r.unit === "kg-aderezo" ? Math.ceil(burritos / BURRITOS_POR_KG_ADEREZO) : burritos * r.gr,
             full: r.unit === "pza" ? porciones * PORTION : r.unit === "kg-aderezo" ? Math.ceil((porciones * PORTION) / BURRITOS_POR_KG_ADEREZO) : porciones * PORTION * r.gr,
+            rawBeanExact: r.key === "frijoles" ? (burritos * r.gr / 1000) * FRIJOL_CRUDO_KG / FRIJOL_COCIDO_KG : null,
+            rawBeanFull: r.key === "frijoles" ? (porciones * PORTION * r.gr / 1000) * FRIJOL_CRUDO_KG / FRIJOL_COCIDO_KG : null,
           })),
         };
       }
@@ -637,6 +694,24 @@
             : item.unit === "kg-aderezo"
               ? `1 kg por cada ${BURRITOS_POR_KG_ADEREZO} burritos`
               : `${item.gr} gr por burrito`;
+          const rawBeanExact = item.rawBeanExact === null ? null : fmtKg(item.rawBeanExact);
+          const rawBeanFull = item.rawBeanFull === null ? null : fmtKg(item.rawBeanFull);
+          const beanDetail = item.key === "frijoles" ? `
+              <div class="ingredient-subdetail">
+                <p class="subdetail-title">Frijol crudo necesario</p>
+                <div class="subdetail-grid">
+                  <div>
+                    <p class="subdetail-label">Exacto</p>
+                    <p class="subdetail-value">${rawBeanExact.val} <span class="unit">${rawBeanExact.label}</span></p>
+                  </div>
+                  <div>
+                    <p class="subdetail-label">x ${result.porciones} ollas</p>
+                    <p class="subdetail-value">${rawBeanFull.val} <span class="unit">${rawBeanFull.label}</span></p>
+                  </div>
+                </div>
+                <p class="subdetail-note">3 kg crudos rinden 5.55 kg cocidos.</p>
+              </div>
+          ` : "";
 
           return `
             <article class="ingredient">
@@ -653,6 +728,7 @@
                 <p class="amount-label">x ${result.porciones} ollas</p>
                 <p class="amount-value">${full.val} <span class="unit">${full.label}</span></p>
               </div>
+              ${beanDetail}
             </article>
           `;
         }).join("");
